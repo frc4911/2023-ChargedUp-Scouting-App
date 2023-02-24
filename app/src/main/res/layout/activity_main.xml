@@ -160,7 +160,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:fontFamily="sans-serif-black"
-            android:text="Setup + Autonomous"
+            android:text="Hehehehaw"
             android:textColor="#CDFFFFFF"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -169,6 +169,32 @@
 
         <TextView
             android:id="@+id/tPowerPort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="52dp"
+            android:fontFamily="sans-serif-black"
+            android:text="Cone"
+            android:textColor="#CDFFFFFF"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bInitiationLine" />
+
+        <TextView
+            android:id="@+id/tPowerPort3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="56dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="sans-serif-black"
+            android:text="Cube"
+            android:textColor="#CDFFFFFF"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bMatchPhase" />
+
+        <TextView
+            android:id="@+id/tPowerPort2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -214,6 +240,20 @@
             app:layout_constraintHorizontal_bias="0.75"
             app:layout_constraintStart_toStartOf="@+id/tAuto"
             app:layout_constraintTop_toBottomOf="@+id/tAuto" />
+
+        <Button
+            android:id="@+id/bType"
+            android:layout_width="240dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="76dp"
+            android:background="@color/purple_500"
+            android:onClick="clickType"
+            android:text="Robot Type"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bPlusBotCube" />
 
         <Button
             android:id="@+id/bPlusTopCone"
@@ -348,6 +388,19 @@
             app:layout_constraintStart_toEndOf="@+id/bMinusBotCube"
             app:layout_constraintTop_toBottomOf="@+id/tUpperCube" />
 
+        <TextView
+            android:id="@+id/tCollect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="28dp"
+            android:fontFamily="sans-serif-black"
+            android:text="Collect: 0"
+            android:textColor="#CDFFFFFF"
+            android:textSize="36sp"
+            app:layout_constraintEnd_toStartOf="@+id/bMinusCollect"
+            app:layout_constraintTop_toBottomOf="@+id/bType" />
+
         <Button
             android:id="@+id/bMinusBotCone"
             android:layout_width="50dp"
@@ -389,6 +442,20 @@
             app:layout_constraintTop_toTopOf="@+id/bPlusBotCube" />
 
         <Button
+            android:id="@+id/bMinusCollect"
+            android:layout_width="50dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="-80dp"
+            android:background="#009688"
+            android:onClick="clickMinusCollect"
+            android:text="-"
+            android:textColor="#FFFFFF"
+            android:textSize="40sp"
+            app:layout_constraintEnd_toEndOf="@+id/bFoul"
+            app:layout_constraintTop_toBottomOf="@+id/bType" />
+
+        <Button
             android:id="@+id/bPlusBotCube"
             android:layout_width="50dp"
             android:layout_height="80dp"
@@ -402,6 +469,21 @@
             android:textSize="40sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/bPlusTopCone" />
+
+        <Button
+            android:id="@+id/bPlusCollect"
+            android:layout_width="50dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="52dp"
+            android:layout_marginTop="13dp"
+            android:background="#009688"
+            android:gravity="center"
+            android:onClick="clickPlusCollect"
+            android:text="+"
+            android:textColor="#FFFFFF"
+            android:textSize="40sp"
+            app:layout_constraintStart_toStartOf="@+id/bMinusCollect"
+            app:layout_constraintTop_toBottomOf="@+id/bType" />
 
         <Button
             android:id="@+id/bPlusMidCone"
@@ -461,6 +543,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="32dp"
             android:layout_marginBottom="12dp"
+            android:background="#FFFFFF"
+            android:backgroundTint="#FFFFFF"
             android:ems="10"
             android:inputType="textPersonName"
             android:text="Defense Rating"
@@ -474,8 +558,20 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="148dp"
+            android:background="#000000"
+            android:backgroundTint="#FFFFFF"
             app:layout_constraintBottom_toTopOf="@+id/bCard"
             app:layout_constraintEnd_toEndOf="parent" />
+
+        <Switch
+            android:id="@+id/switch1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="20dp"
+            android:text="Left Community"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/eTeamNumber" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

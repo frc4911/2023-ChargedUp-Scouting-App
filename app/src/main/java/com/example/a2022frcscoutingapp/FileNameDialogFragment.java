@@ -34,6 +34,7 @@ public class FileNameDialogFragment extends DialogFragment {
         Spinner eventNameDropdown = view.findViewById(R.id.event_name_spinner);
         List<String> eventNames = new ArrayList<>();
         eventNames.add("glacier_peak");
+        eventNames.add("sammamish");
         eventNames.add("cheyenne");
         eventNames.add("pnw_champs");
         eventNames.add("world_champs");
@@ -51,9 +52,7 @@ public class FileNameDialogFragment extends DialogFragment {
         tabletIds.add("5");
         tabletIds.add("6");
         tabletIds.add("7");
-        tabletIds.add("8");
-        tabletIds.add("9");
-        tabletIds.add("10");
+
 
         ArrayAdapter<String> tabletIdsAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, tabletIds);
         tabletIdDropdown.setAdapter(tabletIdsAdapter);

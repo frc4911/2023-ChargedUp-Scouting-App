@@ -1,6 +1,7 @@
 package com.example.a2022frcscoutingapp;
 //idk how to change the file name to 2023 frc
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -51,21 +52,25 @@ public class MainActivity extends AppCompatActivity {
 
             bRobotProblem,
 
+            bPlusCollect, bMinusCollect,
+
             bFoul,
 
             bCard,
 
+            bType,
+
             bSave;
 
-    private TextView tUpperCube, tLowerCube, tUpperCone, tLowerCone, tMidCube, tMidCone;
+    private TextView tUpperCube, tLowerCube, tUpperCone, tLowerCone, tMidCube, tMidCone, tCollect;
     
     private static int zMatchNumber, zScoutID, zAllianceColor,
             zTeamNumber,
             zMatchPhase, zTarmac,
             zAutoTopCube, zAutoMidCube, zAutoBotCube, zAutoTopCone, zAutoMidCone, zAutoBotCone,
             zTopCube, zMidCube, zBotCube, zTopCone, zMidCone, zBotCone,
-
-            zClimb,
+            zCollect,
+            zType,
 
             zRobotProblem,
 
@@ -96,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,7 +132,10 @@ public class MainActivity extends AppCompatActivity {
         bPlusMidCube = findViewById(R.id.bPlusMidCube);
         bMinusMidCube = findViewById(R.id.bMinusMidCube);
         bRobotProblem = findViewById(R.id.bRobotProblem);
+        bType = findViewById(R.id.bType);
         bFoul = findViewById(R.id.bFoul);
+        bPlusCollect = findViewById(R.id.bPlusCollect);
+        bMinusCollect = findViewById(R.id.bMinusCollect);
         //sDock = findViewById(R.id.sDock);
         //sEngage = findViewById(R.id.sEngage);
 
@@ -142,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
         tLowerCone = findViewById(R.id.tLowerCone);
         tMidCube = findViewById(R.id.tMidCube);
         tMidCone = findViewById(R.id.tMidCone);
-
+        tCollect = findViewById(R.id.tCollect);
 
         zeroAllData();
 
@@ -191,11 +200,12 @@ public class MainActivity extends AppCompatActivity {
         zTopCube = 0;
         zMidCube = 0;
         zBotCube = 0;
-        zClimb = 0;
+        zType = 0;
         zRobotProblem = 0;
         zFoul = 0;
         zCard = 0;
         zSaveCount = 0;
+        zCollect = 0;
 
     }
 
@@ -217,6 +227,8 @@ public class MainActivity extends AppCompatActivity {
         setButtonEditable(bMinusMidCube, scoringInfoEditable);
         setButtonEditable(bPlusMidCube, scoringInfoEditable);
         setButtonEditable(bPlusMidCone, scoringInfoEditable);
+        setButtonEditable(bPlusCollect, scoringInfoEditable);
+        setButtonEditable(bMinusCollect, scoringInfoEditable);
 
 
 
@@ -231,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateScoringPortText() {
 
-        int upperDisplayCone, lowerDisplayCone, middleDisplayCone, upperDisplayCube, lowerDisplayCube, middleDisplayCube;
+        int upperDisplayCone, lowerDisplayCone, middleDisplayCone, upperDisplayCube, lowerDisplayCube, middleDisplayCube, collect;
         if(isAuto){
             upperDisplayCone = zAutoTopCone;
             middleDisplayCone = zAutoMidCone;
@@ -239,6 +251,7 @@ public class MainActivity extends AppCompatActivity {
             upperDisplayCube = zAutoTopCube;
             middleDisplayCube = zAutoMidCube;
             lowerDisplayCube = zAutoBotCube;
+            collect = zCollect;
         } else {
 
             upperDisplayCone = zTopCone;
@@ -247,6 +260,8 @@ public class MainActivity extends AppCompatActivity {
             upperDisplayCube = zTopCube;
             middleDisplayCube = zMidCube;
             lowerDisplayCube = zBotCube;
+            collect = zCollect;
+
         }
         tUpperCone.setText("Top = " + upperDisplayCone);
         tMidCone.setText("Mid = " + middleDisplayCone);
@@ -254,6 +269,7 @@ public class MainActivity extends AppCompatActivity {
         tUpperCube.setText("Top = " + upperDisplayCube);
         tMidCube.setText("Mid = " + middleDisplayCube);
         tLowerCube.setText("Bot = " + lowerDisplayCube);
+        tCollect.setText("Collect: " + collect);
     }
 
     private boolean isEmpty(EditText etText) { // a method to check if an edit text is empty
@@ -324,11 +340,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clickTarmac(View v){
-        String[] displayText = {"Climb", "Engaged", "Docked"};
+        String[] displayText = {"No Climb", "Touching", "Leveled"};
         zTarmac = (zTarmac + 1)%3;
 
         bTarmac.setBackgroundColor( (zTarmac == 0) ? darkThemeRed : darkThemeGreen);
         bTarmac.setText(displayText[zTarmac]);
+
+    }
+
+    public void clickType(View v){
+        String[] displayText = {"Defensive", "Offensive", "Transfer"};
+        zType = (zType + 1)%3;
+
+        bType.setBackgroundColor( (zType == 0) ? darkThemeRed : darkThemeGreen);
+        bType.setText(displayText[zType]);
 
     }
 
@@ -457,7 +482,19 @@ public class MainActivity extends AppCompatActivity {
 
     //level 0 = low and level 3 = traversal
 
+    public void clickMinusCollect(View v){
 
+        zCollect = Math.max( (zCollect - 1), 0);
+
+        updateScoringPortText();
+    }
+
+    public void clickPlusCollect(View v){
+
+        zCollect++;
+
+        updateScoringPortText();
+    }
 
     public void clickRobotProblem(View v){
 
@@ -477,9 +514,9 @@ public class MainActivity extends AppCompatActivity {
   //  }
 
 
-   // public void clicksLeftCommunity(View v){
+   public void clicksLeftCommunity(View v){
 
-    //}
+    }
 
    // public void clicksTeleop(View v){
 
@@ -602,7 +639,7 @@ public class MainActivity extends AppCompatActivity {
         write(b, zMidCone);
         write(b, zBotCone);
         write(b, zTarmac);
-
+        write(b, zCollect);
         write(b, zRobotProblem);
         write(b, zFoul);
         write(b, zCard);
