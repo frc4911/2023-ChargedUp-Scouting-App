@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import android.widget.RatingBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,32 +38,52 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String FIlE_NAME_KEY = "standard";
 
+    private static RatingBar rDefenseBar;
+
+    private String strDefenseRating;
+    private static Switch sLeftCommunity;
+
     private View lConstraint;
 
-    private EditText eScoutID, eTeamNumber, eMatchNumber;
+    private EditText eScoutID;
+    private EditText eTeamNumber;
+    private EditText eMatchNumber;
+    private static EditText eDefenseRating;
 
-    private Button bMatchPhase, bTarmac,
-            bMinusTopCube, bMinusTopCone,
+    private Button bMatchPhase;
+    private static Button bTarmac;
+    private Button bMinusTopCube;
+    private Button bMinusTopCone;
 
-            bPlusTopCube, bPlusTopCone,
+    private Button bPlusTopCube;
+    private Button bPlusTopCone;
 
-            bPlusMidCube, bMinusMidCube, bPlusMidCone, bMinusMidCone,
+    private Button bPlusMidCube;
+    private Button bMinusMidCube;
+    private Button bPlusMidCone;
+    private Button bMinusMidCone;
 
-            bPlusBotCone, bPlusBotCube, bMinusBotCube, bMinusBotCone,
+    private Button bPlusBotCone;
+    private Button bPlusBotCube;
+    private Button bMinusBotCube;
+    private Button bMinusBotCone;
 
-            bRobotProblem,
+    private Button bRobotProblem;
 
-            bPlusCollect, bMinusCollect,
+    private Button bPlusCollect;
+    private Button bMinusCollect;
 
-            bFoul,
+    private Button bFoul;
 
-            bCard,
+    private Button bCard;
 
-            bType,
+    private static Button bType;
 
-            bSave;
+    private Button bSave;
 
     private TextView tUpperCube, tLowerCube, tUpperCone, tLowerCone, tMidCube, tMidCone, tCollect;
+
+    private static boolean leftCommunity;
     
     private static int zMatchNumber, zScoutID, zAllianceColor,
             zTeamNumber,
@@ -116,6 +137,8 @@ public class MainActivity extends AppCompatActivity {
         eScoutID = findViewById(R.id.eScoutID);
         eTeamNumber = findViewById(R.id.eTeamNumber);
         eMatchNumber = findViewById(R.id.eMatchNumber);
+        eDefenseRating = findViewById(R.id.eDefenseRating);
+        rDefenseBar = findViewById(R.id.rDefenseBar);
         //bAllianceColor = findViewById(R.id.bAllianceColor);
         bMatchPhase = findViewById(R.id.bMatchPhase);
         bTarmac = findViewById(R.id.bInitiationLine);
@@ -136,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
         bFoul = findViewById(R.id.bFoul);
         bPlusCollect = findViewById(R.id.bPlusCollect);
         bMinusCollect = findViewById(R.id.bMinusCollect);
+        sLeftCommunity = findViewById(R.id.sLeftCommunity);
         //sDock = findViewById(R.id.sDock);
         //sEngage = findViewById(R.id.sEngage);
 
@@ -152,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
         tMidCube = findViewById(R.id.tMidCube);
         tMidCone = findViewById(R.id.tMidCone);
         tCollect = findViewById(R.id.tCollect);
+
 
         zeroAllData();
 
@@ -180,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void showSettings() {
         DialogFragment newFragment = new FileNameDialogFragment();
-        newFragment.show(getSupportFragmentManager(), "missiles");
+        newFragment.show(getSupportFragmentManager(), "cones/cubes");
     }
 
     private static void zeroAllData() {
@@ -206,6 +231,13 @@ public class MainActivity extends AppCompatActivity {
         zCard = 0;
         zSaveCount = 0;
         zCollect = 0;
+        leftCommunity = false;
+        sLeftCommunity.setChecked(leftCommunity);
+        bType.setText("Robot Type");
+        bTarmac.setText("Climb: None");
+        rDefenseBar.setRating(0);
+        eDefenseRating.setText("Defense Rating");
+
 
     }
 
@@ -514,15 +546,6 @@ public class MainActivity extends AppCompatActivity {
   //  }
 
 
-   public void clicksLeftCommunity(View v){
-
-    }
-
-   // public void clicksTeleop(View v){
-
-   // }
-
-
     public void clickFoul(View v){
 
         String[] displayText = {"No Foul", "1-2 Fouls", "Too many (3+) Fouls"};
@@ -539,6 +562,17 @@ public class MainActivity extends AppCompatActivity {
         zCard = (zCard + 1)%3;
         bCard.setBackgroundColor(colorGradients[zCard]);
         bCard.setText(displayText[zCard]);
+    }
+
+    public void clickCommunity(View v){
+        if(leftCommunity == false) {
+            leftCommunity = true;
+        }
+        else
+        {
+            leftCommunity = false;
+        }
+        sLeftCommunity.setChecked(leftCommunity);
     }
 
     public void clickSave(View v) throws IOException{
@@ -573,6 +607,8 @@ public class MainActivity extends AppCompatActivity {
                 zMatchNumber = Integer.parseInt(eMatchNumber.getText().toString());
                 zScoutID = Integer.parseInt(eScoutID.getText().toString());
                 zTeamNumber = Integer.parseInt(eTeamNumber.getText().toString());
+                strDefenseRating = eDefenseRating.getText().toString();
+
 
                 writeFile(fileName);
 
@@ -622,6 +658,35 @@ public class MainActivity extends AppCompatActivity {
 
         BufferedWriter b = new BufferedWriter(new FileWriter(csvFile, true));
 
+        if(zMatchNumber == 1)
+        {
+            writeString(b, "MatchNumber");
+            writeString(b, "ScoutID");
+            writeString(b, "AllianceColor");
+            writeString(b, "TeamNumber");
+            writeString(b, "zAutoTopCube");
+            writeString(b, "AutoMidCube");
+            writeString(b, "AutoBotCube");
+            writeString(b, "AutoTopCone");
+            writeString(b, "AutoMidCone");
+            writeString(b, "AutoBotCone");
+            writeString(b, "TopCube");
+            writeString(b, "MidCube");
+            writeString(b, "BotCube");
+            writeString(b, "TopCone");
+            writeString(b, "MidCone");
+            writeString(b, "BotCone");
+            writeString(b, "Climb");
+            writeString(b, "Collect");
+            writeString(b, "Robot Problem");
+            writeString(b, "Foul");
+            writeString(b, "Card");
+            writeString(b, "Left Community");
+            writeString(b, "Rating");
+            writeString(b, "Defense Rating");
+            b.append("\n");
+
+        }
         write(b, zMatchNumber);
         write(b, zScoutID);
         write(b, zAllianceColor);
@@ -643,6 +708,10 @@ public class MainActivity extends AppCompatActivity {
         write(b, zRobotProblem);
         write(b, zFoul);
         write(b, zCard);
+        writeBoolean(b, leftCommunity);
+        writeFloat(b, rDefenseBar.getRating());
+        writeString(b, strDefenseRating);
+
 
         b.append("\n");
         b.close();
@@ -662,6 +731,31 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    private void writeString(BufferedWriter b, String s){
+        try {
+            b.append(s + ",");
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void writeBoolean(BufferedWriter b, Boolean bo){
+        try {
+            b.append(bo + ",");
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void writeFloat(BufferedWriter b, Float f){
+        try {
+            b.append(f + ",");
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
 //"a useless program created by Jonathan Chu" - Gavin Wan

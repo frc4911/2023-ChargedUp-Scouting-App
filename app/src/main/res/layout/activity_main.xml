@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:onClick="c">
     <!--  Here you put the rest of your current view -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lConstraint"
@@ -160,7 +161,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:fontFamily="sans-serif-black"
-            android:text="Hehehehaw"
+            android:text="Scoring"
             android:textColor="#CDFFFFFF"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -538,7 +539,7 @@
             app:layout_constraintTop_toBottomOf="@+id/eScoutID" />
 
         <EditText
-            android:id="@+id/editTextTextPersonName"
+            android:id="@+id/eDefenseRating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="32dp"
@@ -546,14 +547,14 @@
             android:background="#FFFFFF"
             android:backgroundTint="#FFFFFF"
             android:ems="10"
-            android:inputType="textPersonName"
+            android:inputType="text"
             android:text="Defense Rating"
             android:textAlignment="center"
-            app:layout_constraintBottom_toTopOf="@+id/ratingBar"
+            app:layout_constraintBottom_toTopOf="@+id/rDefenseBar"
             app:layout_constraintEnd_toEndOf="parent" />
 
         <RatingBar
-            android:id="@+id/ratingBar"
+            android:id="@+id/rDefenseBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -564,11 +565,12 @@
             app:layout_constraintEnd_toEndOf="parent" />
 
         <Switch
-            android:id="@+id/switch1"
+            android:id="@+id/sLeftCommunity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="20dp"
+            android:onClick="clickCommunity"
             android:text="Left Community"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/eTeamNumber" />
