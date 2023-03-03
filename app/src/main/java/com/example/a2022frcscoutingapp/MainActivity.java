@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
     
     private static int zMatchNumber, zScoutID, zAllianceColor,
             zTeamNumber,
-            zMatchPhase, zTarmac,
+            zMatchPhase, zTarmac,zAutoTarmac,
             zAutoTopCube, zAutoMidCube, zAutoBotCube, zAutoTopCone, zAutoMidCone, zAutoBotCone,
             zTopCube, zMidCube, zBotCube, zTopCone, zMidCone, zBotCone,
             zCollect,
@@ -213,6 +213,7 @@ public class MainActivity extends AppCompatActivity {
         zTeamNumber = 0;
         zMatchPhase = 0;
         zTarmac = 0;
+        zAutoTarmac = 0;
         zAutoTopCube = 0;
         zAutoTopCone = 0;
         zAutoMidCube = 0;
@@ -293,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
             middleDisplayCube = zMidCube;
             lowerDisplayCube = zBotCube;
             collect = zCollect;
-
+            
         }
         tUpperCone.setText("Top = " + upperDisplayCone);
         tMidCone.setText("Mid = " + middleDisplayCone);
@@ -324,7 +325,6 @@ public class MainActivity extends AppCompatActivity {
 
         String displayText = "Start Match";
         int displayColor = darkThemeRed;
-
         if(zMatchPhase > 2) {
             zMatchPhase = 1;
         }
@@ -352,6 +352,7 @@ public class MainActivity extends AppCompatActivity {
                 lConstraint.setBackgroundColor(backgroundBlack);
                 isAuto = false;
                 saveEnabled = true;
+                bTarmac.setText("CLimb: None");
                 break;
 
             default:
@@ -372,9 +373,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clickTarmac(View v){
-        String[] displayText = {"No Climb", "Touching", "Leveled"};
-        zTarmac = (zTarmac + 1)%3;
-
+        String[] displayText = {"No Climb", "Touching", "Leveled", "In Community"};
+        if(isAuto){
+        zAutoTarmac = (zAutoTarmac + 1)%4;
+            bTarmac.setBackgroundColor( (zAutoTarmac == 0) ? darkThemeRed : darkThemeGreen);
+            bTarmac.setText(displayText[zAutoTarmac]);
+        }
+        zTarmac = (zTarmac + 1)%4;
         bTarmac.setBackgroundColor( (zTarmac == 0) ? darkThemeRed : darkThemeGreen);
         bTarmac.setText(displayText[zTarmac]);
 
@@ -565,14 +570,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clickCommunity(View v){
-        if(leftCommunity == false) {
-            leftCommunity = true;
+
+        if(isAuto) {
+            if (leftCommunity == false) {
+                leftCommunity = true;
+            } else {
+                leftCommunity = false;
+            }
+            sLeftCommunity.setChecked(leftCommunity);
         }
-        else
-        {
-            leftCommunity = false;
-        }
-        sLeftCommunity.setChecked(leftCommunity);
     }
 
     public void clickSave(View v) throws IOException{
@@ -664,7 +670,7 @@ public class MainActivity extends AppCompatActivity {
             writeString(b, "ScoutID");
             writeString(b, "AllianceColor");
             writeString(b, "TeamNumber");
-            writeString(b, "zAutoTopCube");
+            writeString(b, "AutoTopCube");
             writeString(b, "AutoMidCube");
             writeString(b, "AutoBotCube");
             writeString(b, "AutoTopCone");
@@ -677,6 +683,7 @@ public class MainActivity extends AppCompatActivity {
             writeString(b, "MidCone");
             writeString(b, "BotCone");
             writeString(b, "Climb");
+            writeString(b, "Auto Climb");
             writeString(b, "Collect");
             writeString(b, "Robot Problem");
             writeString(b, "Foul");
@@ -684,9 +691,12 @@ public class MainActivity extends AppCompatActivity {
             writeString(b, "Left Community");
             writeString(b, "Rating");
             writeString(b, "Defense Rating");
+            writeString(b, "Robot Type");
             b.append("\n");
 
         }
+        String[] displayText = {"No Climb", "Touching", "Leveled", "In Community"};
+        String[] displayTypeText = {"Offensive", "Transfer", "Defensive"};
         write(b, zMatchNumber);
         write(b, zScoutID);
         write(b, zAllianceColor);
@@ -703,7 +713,10 @@ public class MainActivity extends AppCompatActivity {
         write(b, zTopCone);
         write(b, zMidCone);
         write(b, zBotCone);
-        write(b, zTarmac);
+        writeString(b, displayText[zAutoTarmac]);
+
+        writeString(b, displayText[zTarmac]);
+
         write(b, zCollect);
         write(b, zRobotProblem);
         write(b, zFoul);
@@ -711,7 +724,7 @@ public class MainActivity extends AppCompatActivity {
         writeBoolean(b, leftCommunity);
         writeFloat(b, rDefenseBar.getRating());
         writeString(b, strDefenseRating);
-
+        writeString(b, displayTypeText[zType]);
 
         b.append("\n");
         b.close();
