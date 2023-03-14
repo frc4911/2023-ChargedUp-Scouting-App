@@ -16,6 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +25,7 @@ public class FileNameDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        ObjectMapper mapper = new ObjectMapper();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Get the layout inflater
         LayoutInflater inflater = requireActivity().getLayoutInflater();
@@ -56,7 +59,6 @@ public class FileNameDialogFragment extends DialogFragment {
 
         ArrayAdapter<String> tabletIdsAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, tabletIds);
         tabletIdDropdown.setAdapter(tabletIdsAdapter);
-
 
         builder.setView(view)
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
