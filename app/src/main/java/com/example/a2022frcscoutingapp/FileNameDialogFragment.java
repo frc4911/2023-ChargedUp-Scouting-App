@@ -16,16 +16,20 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.List;
+import java.util.Map;
 
 public class FileNameDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        ObjectMapper mapper = new ObjectMapper();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Get the layout inflater
         LayoutInflater inflater = requireActivity().getLayoutInflater();
@@ -77,5 +81,35 @@ public class FileNameDialogFragment extends DialogFragment {
                     }
                 });
         return builder.create();
+    }
+
+    private class MatchInfo
+    {
+        private int matchNumber;
+        private List<Integer> teamNumber;
+        private List<String> station;
+    }
+
+    private class TeamMatchInfo
+    {
+        private int matchNumber;
+        private int teamNumber;
+        private String station;
+    }
+
+    private class MatchScoutInfo
+    {
+        private int matchNumber;
+        private String station;
+    }
+
+    private Map<MatchScoutInfo, Integer> getMatchInfoToTeamNumberMap()
+    {
+        ObjectMapper mapper = new ObjectMapper();
+
+        //TODO: Get file name
+        List<MatchInfo> matchInfoList = mapper.readValue(new File("sampleFile"), new TypeReference<List<MatchInfo>>(){});
+
+        //TODO: Convert List of MatchInfo to Map of MatchScoutInfo -> Integer
     }
 }
