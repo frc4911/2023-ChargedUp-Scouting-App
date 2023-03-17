@@ -18,6 +18,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.thebluealliance.api.v3.TBA;
 
 import java.io.File;
 import java.io.IOException;
@@ -81,35 +82,5 @@ public class FileNameDialogFragment extends DialogFragment {
                     }
                 });
         return builder.create();
-    }
-
-    private class MatchInfo
-    {
-        private int matchNumber;
-        private List<Integer> teamNumber;
-        private List<String> station;
-    }
-
-    private class TeamMatchInfo
-    {
-        private int matchNumber;
-        private int teamNumber;
-        private String station;
-    }
-
-    private class MatchScoutInfo
-    {
-        private int matchNumber;
-        private String station;
-    }
-
-    private Map<MatchScoutInfo, Integer> getMatchInfoToTeamNumberMap()
-    {
-        ObjectMapper mapper = new ObjectMapper();
-
-        //TODO: Get file name
-        List<MatchInfo> matchInfoList = mapper.readValue(new File("sampleFile"), new TypeReference<List<MatchInfo>>(){});
-
-        //TODO: Convert List of MatchInfo to Map of MatchScoutInfo -> Integer
     }
 }

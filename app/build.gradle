@@ -28,7 +28,8 @@ android {
 }
 
 dependencies {
-
+    implementation 'com.google.code.gson:gson:2.2.4'
+    implementation files('libs/TBA-APIv3-Java-Library-2.1.jar')
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.0.1'
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'
