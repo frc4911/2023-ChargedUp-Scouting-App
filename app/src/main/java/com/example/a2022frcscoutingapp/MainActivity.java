@@ -181,7 +181,6 @@ public class MainActivity extends AppCompatActivity {
         zeroAllData();
 
         setAllElementEditability();
-
     }
 
     @Override

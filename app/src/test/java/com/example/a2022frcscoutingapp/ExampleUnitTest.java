@@ -6,11 +6,17 @@ import static org.junit.Assert.*;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.thebluealliance.api.v3.TBA;
 import com.thebluealliance.api.v3.models.SimpleMatch;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,9 +34,50 @@ public class ExampleUnitTest {
     @Test
     public void tba_test() throws IOException
     {
+        // Get Match Data.
         TBA api = new TBA("AdKpprz7naDhuNjNCAqgzT8QY46m9jBTEgHNNUMiSH5qfUefZwAWHdbomLHagWU6");
         SimpleMatch[] simpleMatches = api.eventRequest.getSimpleMatches("2023wasno");
-        System.out.println();
+        System.out.println(Arrays.toString(simpleMatches));
+
+        // Convert match data to a format that can be parsed.
+        Map<Integer, List<String>> matchMap = ConvertSimpleMatchesToMap(simpleMatches);
+
+        // Write to file
+        File file = new File("testFile.txt");
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = ow.writeValueAsString(matchMap);
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+        writer.write(json);
+        writer.close();
+
+        ObjectMapper mapper = new ObjectMapper();
+        TypeReference<HashMap<Integer, List<String>>> typeReference = new TypeReference<HashMap<Integer, List<String>>>() {};
+        Map<Integer, List<String>> reloadedMatches = mapper.readValue(file, typeReference);
+        System.out.println(ow.writeValueAsString(reloadedMatches));
+    }
+
+    private Map<Integer, List<String>> ConvertSimpleMatchesToMap(SimpleMatch[] simpleMatches) {
+        Map<Integer, List<String>> matchesToTeams = new HashMap<>();
+
+        for (int index = 0; index < simpleMatches.length; index++)
+        {
+            SimpleMatch.Alliance blueAlliance = simpleMatches[index].getBlueAlliance();
+            SimpleMatch.Alliance redAlliance = simpleMatches[index].getRedAlliance();
+
+            List<String> teams = new ArrayList<>();
+            teams.addAll(Arrays.asList(blueAlliance.getTeamKeys()));
+            teams.addAll(Arrays.asList(redAlliance.getTeamKeys()));
+            matchesToTeams.put(index, teams);
+        }
+
+        for (Map.Entry<Integer, List<String>> match : matchesToTeams.entrySet()) {
+            for (String team : match.getValue()) {
+                System.out.printf("Match #%d: Team#: %s\n", match.getKey(), team);
+            }
+        }
+
+        System.out.printf("Match 1, Team 1: %s", matchesToTeams.get(1).get(0));
+        return matchesToTeams;
     }
 
     @Test
@@ -57,6 +104,12 @@ public class ExampleUnitTest {
     {
         private int matchNumber;
         private String station;
+
+        public MatchScoutInfo(int matchNumber, String station)
+        {
+            this.matchNumber = matchNumber;
+            this.station = station;
+        }
     }
 
     private Map<MatchScoutInfo, Integer> getMatchInfoToTeamNumberMap() throws IOException {
