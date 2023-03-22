@@ -36,14 +36,14 @@ public class ExampleUnitTest {
     {
         // Get Match Data.
         TBA api = new TBA("AdKpprz7naDhuNjNCAqgzT8QY46m9jBTEgHNNUMiSH5qfUefZwAWHdbomLHagWU6");
-        SimpleMatch[] simpleMatches = api.eventRequest.getSimpleMatches("2023wasno");
+        SimpleMatch[] simpleMatches = api.eventRequest.getSimpleMatches("2023wasam");
         System.out.println(Arrays.toString(simpleMatches));
 
         // Convert match data to a format that can be parsed.
         Map<Integer, List<String>> matchMap = ConvertSimpleMatchesToMap(simpleMatches);
 
         // Write to file
-        File file = new File("testFile.txt");
+        File file = new File("src/main/res/raw/matchdata.txt");
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = ow.writeValueAsString(matchMap);
         BufferedWriter writer = new BufferedWriter(new FileWriter(file));
