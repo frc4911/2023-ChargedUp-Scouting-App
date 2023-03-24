@@ -16,16 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thebluealliance.api.v3.TBA;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.List;
-import java.util.Map;
 
 public class FileNameDialogFragment extends DialogFragment {
     @NonNull
@@ -64,6 +56,7 @@ public class FileNameDialogFragment extends DialogFragment {
 
         ArrayAdapter<String> tabletIdsAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, tabletIds);
         tabletIdDropdown.setAdapter(tabletIdsAdapter);
+
 
         builder.setView(view)
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
