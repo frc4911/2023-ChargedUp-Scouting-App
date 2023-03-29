@@ -26,12 +26,21 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.material.slider.Slider;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 //ignore all the commented out things :)
 public class MainActivity extends AppCompatActivity {
@@ -120,7 +129,13 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int secretPurple = Color.argb(254, 179, 136, 255); //?
 
+
     private String[] climbDisplayText = {"No Climb", "Touching", "Leveled", "In Community"};
+
+    private Map<Integer, List<String>> matchMap = new HashMap<>();
+
+
+
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -182,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
 
         setAllElementEditability();
 
+        matchMap = parseMatchFile();
     }
 
     @Override
@@ -238,8 +254,6 @@ public class MainActivity extends AppCompatActivity {
         bTarmac.setText("Climb: None");
         rDefenseBar.setRating(0);
         eDefenseRating.setText("Defense Rating");
-
-
     }
 
     private void setAllElementEditability() {
@@ -587,6 +601,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void clickTeamNumber(View v) {
+        if(!isEmpty(eMatchNumber) && !isEmpty(eScoutID))
+        {
+            zMatchNumber = Integer.parseInt(eMatchNumber.getText().toString());
+            zScoutID = Integer.parseInt(eScoutID.getText().toString());
+            setTeamNumber();
+        }
+    }
+
     public void clickSave(View v) throws IOException{
 
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
@@ -637,7 +660,7 @@ public class MainActivity extends AppCompatActivity {
                 setAllElementEditability();
                 zeroAllData();
                 updateScoringPortText();
-                eTeamNumber.setText("");
+                setTeamNumber();
                 bMatchPhase.setText("Start Match");
                 bTarmac.setBackgroundColor(darkThemeRed);
 
@@ -776,6 +799,41 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private HashMap<Integer, List<String>> parseMatchFile() {
+        StringBuilder stringBuilder = new StringBuilder();
+        try (InputStream inputStream =
+                     getResources().openRawResource(R.raw.matchdata);
+             BufferedReader reader = new BufferedReader(
+                     new InputStreamReader(Objects.requireNonNull(inputStream)))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+        } catch (IOException e) {
+            //Cannot parse file and populate team numbers
+        }
+        String stringMatches = stringBuilder.toString();
+
+        ObjectMapper mapper = new ObjectMapper();
+        TypeReference<HashMap<Integer, List<String>>> typeReference = new TypeReference<HashMap<Integer, List<String>>>() {};
+        try {
+            return mapper.readValue(stringMatches, typeReference);
+        } catch (IOException e) {
+            return new HashMap<>();
+        }
+    }
+
+    private void setTeamNumber() {
+        try {
+            zTeamNumber = Integer.parseInt(matchMap.get(zMatchNumber).get(zScoutID - 1).substring(3));
+            eTeamNumber.setText(String.format(Integer.toString(zTeamNumber)));
+        }
+        catch (Exception e)
+        {
+            //Don't throw an exception if we can't populate the Team Numbers
+            eTeamNumber.setText("");
+        }
+    }
 
 }
 //"a useless program created by Jonathan Chu" - Gavin Wan
