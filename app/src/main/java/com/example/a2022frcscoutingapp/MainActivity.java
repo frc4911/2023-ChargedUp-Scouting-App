@@ -129,7 +129,11 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int secretPurple = Color.argb(254, 179, 136, 255); //?
 
+
+    private String[] climbDisplayText = {"No Climb", "Touching", "Leveled", "In Community"};
+
     private Map<Integer, List<String>> matchMap = new HashMap<>();
+
 
 
 
@@ -295,6 +299,7 @@ public class MainActivity extends AppCompatActivity {
             middleDisplayCube = zAutoMidCube;
             lowerDisplayCube = zAutoBotCube;
             collect = zCollect;
+
         } else {
 
             upperDisplayCone = zTopCone;
@@ -322,13 +327,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void clickAllianceColor(View v){
-
-        zAllianceColor = (zAllianceColor + 1) % 2;
-        //bAllianceColor.setBackgroundColor( (zAllianceColor == 0) ? darkThemeBlue : darkThemeRed);
-        //bAllianceColor.setText((zAllianceColor == 0) ? "Blue" : "Red");
-    }
-
     public void clickMatchPhase(View v){
 
         zMatchPhase++;
@@ -350,7 +348,9 @@ public class MainActivity extends AppCompatActivity {
                 isAuto = true;
                 saveEnabled = false;
                 lConstraint.setBackgroundColor(backgroundBlue);
+                updateBTarmac();
                 break;
+
 
             case 2:
                 displayText = "Tele-Operated";
@@ -362,7 +362,7 @@ public class MainActivity extends AppCompatActivity {
                 lConstraint.setBackgroundColor(backgroundBlack);
                 isAuto = false;
                 saveEnabled = true;
-                bTarmac.setText("CLimb: None");
+                updateBTarmac();
                 break;
 
             default:
@@ -383,16 +383,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clickTarmac(View v){
-        String[] displayText = {"No Climb", "Touching", "Leveled", "In Community"};
         if(isAuto){
-        zAutoTarmac = (zAutoTarmac + 1)%4;
-            bTarmac.setBackgroundColor( (zAutoTarmac == 0) ? darkThemeRed : darkThemeGreen);
-            bTarmac.setText(displayText[zAutoTarmac]);
+            zAutoTarmac = (zAutoTarmac + 1)%4;
+            updateBTarmac();
         }
-        zTarmac = (zTarmac + 1)%4;
-        bTarmac.setBackgroundColor( (zTarmac == 0) ? darkThemeRed : darkThemeGreen);
-        bTarmac.setText(displayText[zTarmac]);
+        else{
+            zTarmac = (zTarmac + 1)%4;
+            updateBTarmac();
+        }
+    }
 
+    public void updateBTarmac()
+    {
+        if(isAuto) {
+            bTarmac.setBackgroundColor( (zAutoTarmac == 0) ? darkThemeRed : darkThemeGreen);
+            bTarmac.setText(climbDisplayText[zAutoTarmac]);
+        }
+        else {
+            bTarmac.setBackgroundColor( (zTarmac == 0) ? darkThemeRed : darkThemeGreen);
+            bTarmac.setText(climbDisplayText[zTarmac]);
+        }
     }
 
     public void clickType(View v){
@@ -401,7 +411,7 @@ public class MainActivity extends AppCompatActivity {
 
         bType.setBackgroundColor( (zType == 0) ? darkThemeRed : darkThemeGreen);
         bType.setText(displayText[zType]);
-
+        updateScoringPortText();
     }
 
     public void clickPlusTopCone(View v){
@@ -716,6 +726,7 @@ public class MainActivity extends AppCompatActivity {
         }
         String[] displayText = {"No Climb", "Touching", "Leveled", "In Community"};
         String[] displayTypeText = {"Offensive", "Transfer", "Defensive"};
+        String[] displayTextProblem = {"No Robot Problem", "Broken Parts", "Dead Partially", "Dead All Match"};
         write(b, zMatchNumber);
         write(b, zScoutID);
         write(b, zAllianceColor);
@@ -737,7 +748,7 @@ public class MainActivity extends AppCompatActivity {
         writeString(b, displayText[zTarmac]);
 
         write(b, zCollect);
-        write(b, zRobotProblem);
+        writeString(b, displayTextProblem[zRobotProblem]);
         write(b, zFoul);
         write(b, zCard);
         writeBoolean(b, leftCommunity);
