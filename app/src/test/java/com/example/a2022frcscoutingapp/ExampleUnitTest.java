@@ -55,20 +55,22 @@ public class ExampleUnitTest {
     private Map<Integer, List<String>> ConvertSimpleMatchesToMap(SimpleMatch[] simpleMatches) {
         Map<Integer, List<String>> matchesToTeams = new HashMap<>();
 
-        for (int index = 0; index < simpleMatches.length; index++)
+        for (SimpleMatch simpleMatch : simpleMatches)
         {
-            SimpleMatch.Alliance blueAlliance = simpleMatches[index].getBlueAlliance();
-            SimpleMatch.Alliance redAlliance = simpleMatches[index].getRedAlliance();
+            if (simpleMatch.getCompLevel().equals("qm")) {
+                SimpleMatch.Alliance blueAlliance = simpleMatch.getBlueAlliance();
+                SimpleMatch.Alliance redAlliance = simpleMatch.getRedAlliance();
 
-            List<String> teams = new ArrayList<>();
-            teams.addAll(Arrays.asList(blueAlliance.getTeamKeys()));
-            teams.addAll(Arrays.asList(redAlliance.getTeamKeys()));
-            matchesToTeams.put(index, teams);
+                List<String> teams = new ArrayList<>();
+                teams.addAll(Arrays.asList(blueAlliance.getTeamKeys()));
+                teams.addAll(Arrays.asList(redAlliance.getTeamKeys()));
+                matchesToTeams.put(simpleMatch.getMatchNumber(), teams);
+            }
         }
 
         for (Map.Entry<Integer, List<String>> match : matchesToTeams.entrySet()) {
-            for (String team : match.getValue()) {
-                System.out.printf("Match #%d: Team#: %s\n", match.getKey(), team);
+            for (int i = 0; i < match.getValue().size(); i++) {
+                System.out.printf("Match #%d: Team#%d: %s\n", match.getKey(), i, match.getValue().get(i));
             }
         }
 
