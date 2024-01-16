@@ -45,6 +45,9 @@ import java.util.Objects;
 //ignore all the commented out things :)
 public class MainActivity extends AppCompatActivity {
 
+
+
+
     public static final String FIlE_NAME_KEY = "standard";
 
     private static RatingBar rDefenseBar;
@@ -152,6 +155,34 @@ public class MainActivity extends AppCompatActivity {
     private boolean no_robot_problem;
     private boolean broken_parts;
     private boolean partially_dead;
+
+
+    /////new variables
+    private int trap;
+
+    private int spotlight;
+
+    private boolean melody;
+
+    private String Climb_end = "C";
+
+    private String Park_end = "P";
+
+    private String Nothing_end = "N";
+
+    private boolean Card_red;
+
+    private boolean Card_yellow;
+
+    private boolean disabled;
+
+
+    private boolean no_robot_problem;
+    private boolean broken_parts;
+    private boolean partially_dead;
+
+
+
 
     private String[] climbDisplayText = {"No Climb", "Touching", "Leveled", "In Community"};
 
